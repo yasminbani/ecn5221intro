@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Interactive self-instructional module: The Nature of Econometrics and Economic Data.">
+<style>html{-webkit-text-size-adjust:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Econometrics Unit 1 SIM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky unit rail on the left (top strip on phones), one unit shown at a time, practice set as the final unit. */
+:root{
+  --bg:#f3f5f6; --surface:#ffffff; --surface-2:#e8edf0; --ink:#17232b; --muted:#5a6b76; --line:#d3dce1;
+  --accent:#1d5f7a; --accent-soft:#dcebf1; --ochre:#9a6512; --ochre-soft:#f6ead3;
+  --ok:#23704a; --ok-soft:#dff1e6; --bad:#a83a32; --bad-soft:#f8e1de;
+  --f-display:"Newsreader", Georgia, "Times New Roman", serif;
+  --f-body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10181d; --surface:#172229; --surface-2:#1f2d35; --ink:#e4ecf0; --muted:#9aacb7; --line:#2c3d47;
+  --accent:#6fb6d3; --accent-soft:#1b3746; --ochre:#e0ac5a; --ochre-soft:#3a2c14;
+  --ok:#6cc995; --ok-soft:#173627; --bad:#ee8a80; --bad-soft:#3d1d1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10181d; --surface:#172229; --surface-2:#1f2d35; --ink:#e4ecf0; --muted:#9aacb7; --line:#2c3d47;
+  --accent:#6fb6d3; --accent-soft:#1b3746; --ochre:#e0ac5a; --ochre-soft:#3a2c14;
+  --ok:#6cc995; --ok-soft:#173627; --bad:#ee8a80; --bad-soft:#3d1d1a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-family:var(--f-display);font-weight:600;font-size:clamp(28px,4vw,40px);line-height:1.15;margin:4px 0 0;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3vw,30px);line-height:1.2;margin:0 0 8px;text-wrap:balance}
+h3{font-size:17px;font-weight:700;margin:28px 0 8px}
+h4{font-size:15px;font-weight:700;margin:0 0 6px}
+p{margin:0 0 12px}
+.lead{font-size:17px;color:var(--muted);max-width:68ch}
+.scorebox{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted)}
+.meter{width:160px;height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.scorebox b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px;align-items:start}
+nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:flex;flex-direction:column;gap:2px}
+nav.rail a{display:flex;gap:10px;align-items:baseline;padding:8px 10px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:14.5px;line-height:1.35}
+nav.rail a .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);min-width:22px}
+nav.rail a:hover{background:var(--surface-2)}
+nav.rail a[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+nav.rail a[aria-current="page"] .n{color:var(--accent)}
+nav.rail .sep{height:1px;background:var(--line);margin:8px 0}
+nav.rail a .done{margin-left:auto;font-size:12px;color:var(--ok)}
+
+main{min-width:0}
+section.view{display:none}
+section.view.on{display:block}
+.prose{max-width:70ch}
+.prose ul,.prose ol{padding-left:22px;margin:0 0 12px}
+.prose li{margin-bottom:4px}
+.def{border-left:3px solid var(--accent);background:var(--surface);padding:14px 18px;border-radius:0 var(--r) var(--r) 0;margin:16px 0;max-width:70ch}
+.def .eyebrow{color:var(--accent)}
+.note{background:var(--ochre-soft);color:var(--ink);padding:12px 16px;border-radius:var(--r);font-size:15px;max-width:70ch;margin:16px 0}
+.note b{color:var(--ochre)}
+.outcomes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:16px 0 24px}
+.outcomes div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;font-size:15px}
+.outcomes .k{font-family:var(--f-mono);font-size:12px;color:var(--accent);display:block;margin-bottom:4px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:12px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;min-width:0}
+.tile p{font-size:15px;margin:0}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--muted);margin-bottom:6px}
+.tag.ok{background:var(--ok-soft);color:var(--ok)} .tag.bad{background:var(--bad-soft);color:var(--bad)}
+
+/* equations */
+.eq{font-family:var(--f-display);font-size:clamp(17px,2.3vw,21px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:14px 0;overflow-x:auto;white-space:nowrap}
+.eq var{font-style:italic}
+.eq sub{font-size:.65em}
+.eqx{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--f-display);font-size:clamp(17px,2.4vw,22px)}
+.eqx button{font:inherit;color:var(--ink);background:var(--surface-2);border:1px solid transparent;border-radius:6px;padding:2px 8px;cursor:pointer}
+.eqx button:hover{border-color:var(--accent)}
+.eqx button.sel{background:var(--accent);color:var(--surface)}
+.eqx .op{color:var(--muted);padding:0 2px}
+.explain{margin-top:12px;min-height:3.2em;font-size:15px;color:var(--ink);background:var(--accent-soft);border-radius:6px;padding:10px 14px}
+
+/* tables */
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--f-mono);font-weight:500;font-size:12.5px;color:var(--muted);background:var(--surface-2)}
+td:first-child,th:first-child{text-align:left}
+tr.dots td{color:var(--muted);text-align:center;letter-spacing:.3em}
+tr.hl td{background:var(--ochre-soft)}
+.caption{font-size:13px;color:var(--muted)}
+.segs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
+.segs button{font:inherit;font-size:14px;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.segs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* steps */
+ol.steps{list-style:none;padding:0;margin:12px 0;counter-reset:s;max-width:70ch}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+ol.steps li::before{content:counter(s);font-family:var(--f-mono);font-size:13px;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+
+/* practice components */
+.check{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin:28px 0 8px}
+.check > .eyebrow{color:var(--accent);margin-bottom:6px;display:block}
+.q{padding:16px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:0}
+.q .stem{font-weight:600;margin-bottom:10px;max-width:72ch}
+.q .stem .qn{font-family:var(--f-mono);font-weight:500;color:var(--muted);font-size:13px;margin-right:6px}
+.opts{display:grid;gap:6px;max-width:72ch}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 12px;cursor:pointer;line-height:1.45}
+.opt .l{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);padding-top:2px}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+.btn{font:inherit;font-size:14px;font-weight:600;padding:8px 16px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:var(--surface);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:2px solid var(--ochre);outline-offset:2px}
+.fb{margin-top:10px;padding:10px 14px;border-radius:6px;font-size:15px;max-width:72ch}
+.fb.ok{background:var(--ok-soft)} .fb.bad{background:var(--bad-soft)}
+.fb b{display:block;margin-bottom:2px}
+.fb.ok b{color:var(--ok)} .fb.bad b{color:var(--bad)}
+
+.classify{display:grid;gap:8px}
+.crow{display:grid;grid-template-columns:minmax(0,1fr) 210px 26px;gap:12px;align-items:center;padding:10px 12px;background:var(--bg);border:1px solid var(--line);border-radius:6px}
+.crow.right{border-color:var(--ok);background:var(--ok-soft)} .crow.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.crow p{margin:0;font-size:15px}
+.crow .why{grid-column:1 / -1;font-size:14px;color:var(--muted);margin-top:2px}
+select,input[type="number"],textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 10px;width:100%}
+.mark{font-weight:700;text-align:center}
+.crow.right .mark{color:var(--ok)} .crow.wrong .mark{color:var(--bad)}
+
+.order{list-style:none;padding:0;margin:0;display:grid;gap:6px;max-width:72ch}
+.order li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:15px}
+.order li .pos{font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+.order li.right{border-color:var(--ok);background:var(--ok-soft)} .order li.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.mv{display:flex;gap:4px}
+.mv button{font:inherit;width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+
+.num{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:12px;align-items:center;max-width:72ch}
+.short textarea{min-height:120px;resize:vertical;margin-top:4px}
+.model{margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:14px 16px;font-size:15px;max-width:72ch}
+.model ul{padding-left:20px;margin:6px 0 0}
+.rubric label{display:flex;gap:8px;align-items:flex-start;font-size:14.5px;margin-top:6px}
+.rubric input{margin-top:4px}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)}
+.pager a{color:var(--accent);text-decoration:none;font-weight:600;font-size:15px}
+.pager a:hover{text-decoration:underline}
+.sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.sumgrid div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.sumgrid .v{font-family:var(--f-mono);font-size:20px;font-variant-numeric:tabular-nums}
+.sumgrid .k{font-size:13px;color:var(--muted)}
+
+@media (max-width:860px){
+  .layout{grid-template-columns:minmax(0,1fr);gap:16px}
+  nav.rail{position:static;flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  nav.rail a{white-space:nowrap;flex:none}
+  nav.rail .sep{display:none}
+  nav.rail a .done{margin-left:4px}
+}
+@media (max-width:560px){
+  .crow{grid-template-columns:minmax(0,1fr) 26px}
+  .crow select{grid-column:1 / 2;grid-row:2}
+  .crow .mark{grid-row:1 / 3;grid-column:2}
+  .num{grid-template-columns:minmax(0,1fr)}
+  .meter{width:100px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Self-Instructional Material · Postgraduate Econometrics</div>
+      <h1>Unit 1: The Nature of Econometrics and Economic Data</h1>
+    </div>
+    <div class="scorebox" aria-live="polite">
+      <span>Auto-marked items</span>
+      <div class="meter"><i id="meterFill"></i></div>
+      <span><b id="scoreTxt">0 / 0</b> correct</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="rail" id="rail" aria-label="Units">
+      <a href="#overview" data-v="overview"><span class="n">00</span>Start here</a>
+      <div class="sep"></div>
+      <a href="#unit-1" data-v="unit-1"><span class="n">1.1</span>What econometrics is</a>
+      <a href="#unit-2" data-v="unit-2"><span class="n">1.2</span>Economic vs econometric models</a>
+      <a href="#unit-3" data-v="unit-3"><span class="n">1.3</span>How data are generated</a>
+      <a href="#unit-4" data-v="unit-4"><span class="n">1.4</span>Structures of economic data</a>
+      <a href="#unit-5" data-v="unit-5"><span class="n">1.5</span>Causality and ceteris paribus</a>
+      <a href="#unit-6" data-v="unit-6"><span class="n">1.6</span>Research process and writing</a>
+      <div class="sep"></div>
+      <a href="#practice" data-v="practice"><span class="n">P</span>Practice set</a>
+      <a href="#summary" data-v="summary"><span class="n">Σ</span>My results</a>
+    </nav>
+
+    <main>
+<!-- ============ OVERVIEW ============ -->
+<section class="view" id="v-overview">
+  <h2>Start here</h2>
+  <p class="lead">This module combines the two Chapter 1 lecture decks: <em>An Introduction to Econometrics</em> and <em>The Nature of Econometrics and Economic Data</em>. Work through the six short units, answer the check questions at the end of each, then attempt the practice set.</p>
+
+  <h3>Learning outcomes</h3>
+  <p>By the end of this unit you should be able to:</p>
+  <div class="outcomes">
+    <div><span class="k">LO1</span>Define econometrics and distinguish an economic model from an econometric model.</div>
+    <div><span class="k">LO2</span>Classify economic data by how they are generated and by their structure.</div>
+    <div><span class="k">LO3</span>Explain causality and <i>ceteris paribus</i> in econometric analysis.</div>
+    <div><span class="k">LO4</span>Outline the steps of the empirical research process.</div>
+  </div>
+
+  <h3>How to use this module</h3>
+  <div class="prose">
+    <ul>
+      <li><b>Estimated time:</b> 2.5 to 3 hours, including the practice set.</li>
+      <li><b>Check your understanding</b> boxes give instant feedback with an explanation. Read the explanation even when you are right.</li>
+      <li>The <b>practice set</b> has auto-marked items (multiple choice, classification, ordering and numerical) and written questions with model answers and a self-marking checklist.</li>
+      <li>Your answers and drafts are kept in this browser only. Use <b>My results</b> to review your score or reset.</li>
+    </ul>
+  </div>
+  <div class="note"><b>Before you start:</b> make sure you are comfortable with the idea of a function <i>y</i> = <i>f</i>(<i>x</i>), a random variable, and a sample versus a population. These ideas are used throughout.</div>
+  <div class="pager"><span></span><a href="#unit-1">Begin Unit 1.1 →</a></div>
+</section>
+
+<!-- ============ UNIT 1 ============ -->
+<section class="view" id="v-unit-1">
+  <div class="eyebrow">Unit 1.1</div>
+  <h2>What econometrics is, and why study it</h2>
+  <div class="def"><div class="eyebrow">Definition</div>Econometrics uses economic theory and data from economics, business and the social sciences, together with tools from statistics, to answer <b>"how much"</b> questions. Put briefly, it is the use of statistical methods to analyse economic data.</div>
+  <div class="prose">
+    <p>Econometrics fills the gap between being a <em>student</em> of economics and being a <em>practising</em> economist. It lets you say to an employer:</p>
+    <ul>
+      <li>"I can predict the sales of your product."</li>
+      <li>"I can estimate the effect on your sales if your competitor lowers its price by RM1 per unit."</li>
+      <li>"I can test whether your new advertising campaign is actually increasing sales."</li>
+    </ul>
+    <h3>"How much" questions decision-makers face</h3>
+    <ul>
+      <li>A city council: how much will violent crime fall if an extra million is spent on uniformed police?</li>
+      <li>A university: how much will enrolment fall if tuition rises by a given amount, and will tuition revenue rise or fall?</li>
+      <li>A transport authority: how will a fare increase affect the number of travellers who switch to car or bike, and what happens to revenue?</li>
+      <li>An investor: how much of your savings should go into a stock fund versus the money market, given forecasts of activity, inflation and interest rates?</li>
+    </ul>
+    <h3>Typical goals of econometric analysis</h3>
+  </div>
+  <div class="grid2">
+    <div class="tile"><span class="tag">Estimate</span><p>Estimate relationships and parameters between economic variables, such as an elasticity.</p></div>
+    <div class="tile"><span class="tag">Test</span><p>Test economic theories and hypotheses, such as whether newspaper advertising beats store displays.</p></div>
+    <div class="tile"><span class="tag">Predict / evaluate</span><p>Forecast outcomes (GDP, inflation, interest rates, college enrolment) and evaluate government and business policy.</p></div>
+  </div>
+  <div class="note"><b>Key point:</b> econometricians typically analyse <em>non-experimental</em> data. That single fact explains much of what makes econometrics different from statistics in the laboratory sciences.</div>
+
+  <div class="check" data-mcq="u1"><span class="eyebrow">Check your understanding</span></div>
+  <div class="pager"><a href="#overview">← Start here</a><a href="#unit-2">Unit 1.2 →</a></div>
+</section>
+
+<!-- ============ UNIT 2 ============ -->
+<section class="view" id="v-unit-2">
+  <div class="eyebrow">Unit 1.2</div>
+  <h2>Economic models and econometric models</h2>
+  <div class="prose">
+    <p>Econometric analysis usually moves through two steps: (1) an <b>economic model</b>, which is sometimes skipped, and (2) an <b>econometric model</b>.</p>
+    <p>An economic model may be micro or macro. It often rests on optimising behaviour or equilibrium, and it establishes relationships between economic variables, for example demand equations or pricing equations. We express these ideas with a function.</p>
+    <h3>Example: Becker's (1968) economic model of crime</h3>
+    <p>Derived from utility maximisation, the model says hours spent in criminal activity depend on:</p>
+  </div>
+  <div class="eq"><var>y</var> = <var>f</var>(<var>x</var><sub>1</sub>, <var>x</var><sub>2</sub>, <var>x</var><sub>3</sub>, <var>x</var><sub>4</sub>, <var>x</var><sub>5</sub>, <var>x</var><sub>6</sub>, <var>x</var><sub>7</sub>)</div>
+  <div class="prose">
+    <p class="caption"><i>y</i> = hours in criminal activity; <i>x</i><sub>1</sub> = "wage" from crime; <i>x</i><sub>2</sub> = wage in legal employment; <i>x</i><sub>3</sub> = other income; <i>x</i><sub>4</sub> = probability of being caught; <i>x</i><sub>5</sub> = probability of conviction if caught; <i>x</i><sub>6</sub> = expected sentence; <i>x</i><sub>7</sub> = age.</p>
+    <p>The functional form is <b>not</b> specified. The equation could also have been written down without formal economic modelling.</p>
+    <h3>From economic to econometric model</h3>
+    <p>To turn this into something we can estimate we must (a) choose a functional form, (b) replace unobservable variables with measurable proxies, and (c) add an error term. Click each term below to see what it means.</p>
+  </div>
+  <div class="tile" style="margin:12px 0">
+    <h4>Econometric model of criminal activity</h4>
+    <div class="eqx" data-eqx="crime"></div>
+    <div class="explain" id="explain-crime">Select a term.</div>
+  </div>
+  <div class="tile" style="margin:12px 0">
+    <h4>Econometric model of job training and worker productivity</h4>
+    <div class="eqx" data-eqx="wage"></div>
+    <div class="explain" id="explain-wage">Select a term.</div>
+  </div>
+  <div class="prose">
+    <h3>Systematic part and random part</h3>
+    <p>Every econometric model has two components:</p>
+    <ul>
+      <li>A <b>systematic part</b>, which comes from economic theory and includes an assumption about functional form.</li>
+      <li>A <b>random, unpredictable component</b> (<i>u</i> in Wooldridge, <i>e</i> in Hill et al.). It is "noise" that obscures our view of the relationship.</li>
+    </ul>
+    <p>The coefficients β are unknown parameters that we estimate from data. The functional form is itself a hypothesis, and one challenge is to choose a form that is compatible with both theory and the data. <b>Most of econometrics deals with the specification of the error <i>u</i></b>: what is in it, and how it relates to the explanatory variables.</p>
+    <h3>Using the model for statistical inference</h3>
+    <ul>
+      <li><b>Estimating</b> economic parameters, such as elasticities.</li>
+      <li><b>Predicting</b> economic outcomes, such as enrolment in two-year colleges over the next ten years.</li>
+      <li><b>Testing</b> hypotheses. In the wage equation, β<sub>3</sub> is the effect of training on wages: how large is it, and is it different from zero?</li>
+    </ul>
+  </div>
+  <div class="check" data-mcq="u2"><span class="eyebrow">Check your understanding</span></div>
+  <div class="pager"><a href="#unit-1">← Unit 1.1</a><a href="#unit-3">Unit 1.3 →</a></div>
+</section>
+
+<!-- ============ UNIT 3 ============ -->
+<section class="view" id="v-unit-3">
+  <div class="eyebrow">Unit 1.3</div>
+  <h2>How are data generated?</h2>
+  <div class="prose">
+    <p>We must have data. Economists work in a complex world where data on variables are <b>observed</b> and rarely obtained from a controlled experiment. That makes learning about economic parameters harder.</p>
+  </div>
+  <div class="grid2">
+    <div class="tile">
+      <span class="tag ok">Experimental data</span>
+      <p>The researcher controls (ideally randomly assigns) the level of the variable of interest and observes outcomes. Rare in business and the social sciences, but they exist. A notable example is <b>Tennessee's Project STAR</b>, where students were randomly assigned to small or regular-sized classes.</p>
+    </div>
+    <div class="tile">
+      <span class="tag bad">Non-experimental data</span>
+      <p>Values are neither fixed nor repeatable. In <b>survey data</b>, for example, data on all variables are collected simultaneously. Most economic data, such as labour force surveys, national accounts and financial prices, are of this kind.</p>
+    </div>
+  </div>
+  <div class="note"><b>Why it matters:</b> with experimental data, random assignment makes the treatment unrelated to other factors, so a simple comparison has a causal meaning. With non-experimental data, the variable of interest may be correlated with factors in <i>u</i>, and naïve comparisons can mislead. Unit 1.5 develops this idea.</div>
+  <div class="check" data-mcq="u3"><span class="eyebrow">Check your understanding</span></div>
+  <div class="pager"><a href="#unit-2">← Unit 1.2</a><a href="#unit-4">Unit 1.4 →</a></div>
+</section>
+
+<!-- ============ UNIT 4 ============ -->
+<section class="view" id="v-unit-4">
+  <div class="eyebrow">Unit 1.4</div>
+  <h2>Structures and types of economic data</h2>
+  <div class="prose">
+    <p>Econometric methods depend on the nature of the data. Using inappropriate methods can give misleading results. There are four main data structures. Select one to see an example from the lecture tables.</p>
+  </div>
+  <div class="segs" id="dsSegs" role="group" aria-label="Data structure"></div>
+  <div id="dsPanel"></div>
+
+  <div class="prose">
+    <h3>Other ways to describe data</h3>
+  </div>
+  <div class="grid2">
+    <div class="tile"><span class="tag">Aggregation</span><p><b>Micro</b>: individuals, households, firms. <b>Macro</b>: aggregated across a whole economy or region.</p></div>
+    <div class="tile"><span class="tag">Stock vs flow</span><p><b>Flow</b>: measured over a period of time, such as GDP for 2025. <b>Stock</b>: measured at a point in time, such as the money supply on 31 December.</p></div>
+    <div class="tile"><span class="tag">Quantitative vs qualitative</span><p><b>Quantitative</b>: expressed as numbers. <b>Qualitative</b>: an "either-or" situation, usually coded as a 0/1 dummy (such as <i>female</i>, <i>married</i>).</p></div>
+  </div>
+  <div class="check" data-mcq="u4"><span class="eyebrow">Check your understanding</span></div>
+  <div class="pager"><a href="#unit-3">← Unit 1.3</a><a href="#unit-5">Unit 1.5 →</a></div>
+</section>
+
+<!-- ============ UNIT 5 ============ -->
+<section class="view" id="v-unit-5">
+  <div class="eyebrow">Unit 1.5</div>
+  <h2>Causality and the notion of ceteris paribus</h2>
+  <div class="def"><div class="eyebrow">Causal effect of x on y</div>How does variable <i>y</i> change if variable <i>x</i> is changed, but all other relevant factors are held constant?</div>
+  <div class="prose">
+    <p><b>Ceteris paribus</b> means "other relevant factors being equal." Most economic questions are ceteris paribus questions. It is important to define which causal effect you are interested in, and it is useful to describe how an experiment would have to be designed to infer that causal effect.</p>
+    <h3>Four classic cases</h3>
+  </div>
+  <div class="grid2">
+    <div class="tile"><span class="tag ok">Experiment feasible</span><h4>Fertilizer and crop yield</h4><p>Randomly assign fertilizer amounts to one-acre plots and compare yields. It works because the amount applied is unrelated to land quality, rainfall or parasites.</p></div>
+    <div class="tile"><span class="tag bad">Experiment infeasible</span><h4>Return to education</h4><p>We cannot randomly assign years of schooling. Without random assignment, education is related to other factors that affect wages, such as ability, family background and experience.</p></div>
+    <div class="tile"><span class="tag bad">Experiment infeasible</span><h4>Police and city crime</h4><p>No two cities are alike except in police numbers. More importantly, police numbers are determined <em>at the same time</em> as the crime rate (simultaneity).</p></div>
+    <div class="tile"><span class="tag bad">Experiment infeasible</span><h4>Minimum wage and unemployment</h4><p>Randomly setting the minimum wage would work in theory. In reality its level depends on political and economic factors that also affect unemployment.</p></div>
+  </div>
+  <div class="note"><b>Thinking tool:</b> for any research question, ask "What is the ideal randomised experiment?" Then ask "Why can't I run it, and what does that imply about the factors hiding in <i>u</i>?" The answer tells you what can go wrong with a simple regression.</div>
+  <div class="check" data-mcq="u5"><span class="eyebrow">Check your understanding</span></div>
+  <div class="pager"><a href="#unit-4">← Unit 1.4</a><a href="#unit-6">Unit 1.6 →</a></div>
+</section>
+
+<!-- ============ UNIT 6 ============ -->
+<section class="view" id="v-unit-6">
+  <div class="eyebrow">Unit 1.6</div>
+  <h2>The research process, writing, and data sources</h2>
+  <div class="prose">
+    <p>Econometrics is ultimately a research tool. You will either do research, read and evaluate other people's, or both. Research flows in an orderly pattern:</p>
+  </div>
+  <ol class="steps">
+    <li><div>Use <b>economic theory</b> to think about the problem.</div></li>
+    <li><div>Develop a working <b>economic model</b> leading to an <b>econometric model</b>.</div></li>
+    <li><div>Obtain <b>sample data</b> and choose a method of statistical analysis based on initial assumptions and how the data were collected.</div></li>
+    <li><div><b>Estimate</b> the unknown parameters with statistical software, make predictions and test hypotheses.</div></li>
+    <li><div>Perform <b>model diagnostics</b> to check the validity of assumptions.</div></li>
+    <li><div><b>Analyse and evaluate</b> the economic consequences and implications of the results.</div></li>
+  </ol>
+  <div class="grid2">
+    <div class="tile">
+      <h4>A research proposal abstract should include</h4>
+      <div class="prose"><ul style="font-size:15px;margin:0">
+        <li>A concise statement of the problem</li>
+        <li>Available information, with one or two key references</li>
+        <li>The research design: economic model; econometric estimation and inference methods; data sources; estimation, testing and prediction procedures, including software version</li>
+        <li>The potential contribution of the research</li>
+      </ul></div>
+    </div>
+    <div class="tile">
+      <h4>Typical outline of a research report</h4>
+      <div class="prose"><ol style="font-size:15px;margin:0">
+        <li>Statement of the problem</li><li>Review of the literature</li><li>The economic model</li><li>The econometric model</li><li>The data</li><li>Estimation and inference procedures</li><li>Empirical results and conclusions</li><li>Extensions and limitations</li><li>Acknowledgments</li><li>References</li>
+      </ol></div>
+    </div>
+  </div>
+  <div class="prose">
+    <p>Writing forces you to distil ideas, and nothing reveals your depth of understanding as clearly. A style guide such as <i>The Chicago Manual of Style</i> or Turabian's <i>A Manual for Writers of Research Papers, Theses, and Dissertations</i> is a good investment.</p>
+    <h3>Sources of economic data</h3>
+    <p>Finding a source is not the same as obtaining the data, and obtaining data is often easier than understanding what it means.</p>
+  </div>
+  <div class="grid2">
+    <div class="tile"><span class="tag">Gateways</span><p>Resources for Economists (RFE), National Bureau of Economic Research (NBER), EconEdLink, Economagic.</p></div>
+    <div class="tile"><span class="tag">Databases</span><p>FRED (Federal Reserve Bank of St. Louis), Penn World Tables, World Bank World Development Indicators.</p></div>
+    <div class="tile"><span class="tag">Local examples</span><p>For Malaysian work: Department of Statistics Malaysia (OpenDOSM), Bank Negara Malaysia statistics, Bursa Malaysia. (Added for local context.)</p></div>
+  </div>
+  <div class="check" data-mcq="u6"><span class="eyebrow">Check your understanding</span></div>
+  <div class="pager"><a href="#unit-5">← Unit 1.5</a><a href="#practice">Practice set →</a></div>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section class="view" id="v-practice">
+  <div class="eyebrow">Practice set</div>
+  <h2>Practice questions</h2>
+  <p class="lead">Parts A to E are marked automatically. Part F asks for written answers: draft yours first, then reveal the model answer and tick the points you covered.</p>
+
+  <div class="check">
+    <span class="eyebrow">Part A · Multiple choice</span>
+    <div data-mcq="pa"></div>
+  </div>
+
+  <div class="check">
+    <span class="eyebrow">Part B · Classify the data structure</span>
+    <p>Choose the data structure that best describes each data set, then select <b>Check all</b>.</p>
+    <div class="classify" data-classify="structure"></div>
+    <div class="actions"><button class="btn" data-check-classify="structure">Check all</button><button class="btn ghost" data-reset-classify="structure">Reset</button><span class="caption" id="cl-structure-msg"></span></div>
+  </div>
+
+  <div class="check">
+    <span class="eyebrow">Part C · Stock or flow?</span>
+    <p>Decide whether each variable is a stock or a flow.</p>
+    <div class="classify" data-classify="stockflow"></div>
+    <div class="actions"><button class="btn" data-check-classify="stockflow">Check all</button><button class="btn ghost" data-reset-classify="stockflow">Reset</button><span class="caption" id="cl-stockflow-msg"></span></div>
+  </div>
+
+  <div class="check">
+    <span class="eyebrow">Part D · Order the research process</span>
+    <p>Use the arrows to put the six steps of empirical research in the correct order.</p>
+    <ul class="order" id="orderList"></ul>
+    <div class="actions"><button class="btn" id="orderCheck">Check order</button><button class="btn ghost" id="orderShuffle">Shuffle again</button></div>
+    <div id="orderFb"></div>
+  </div>
+
+  <div class="check">
+    <span class="eyebrow">Part E · Numerical questions</span>
+    <p>Suppose the job training model has been estimated with data on hourly wages (RM):</p>
+    <div class="eq"><var>wage</var>̂ = −2.10 + 0.60 <var>educ</var> + 0.05 <var>exper</var> + 0.15 <var>training</var></div>
+    <div data-num></div>
+  </div>
+
+  <div class="check">
+    <span class="eyebrow">Part F · Written questions</span>
+    <p>These are typical of postgraduate assessment. Aim for 150 to 300 words each.</p>
+    <div data-short></div>
+  </div>
+  <div class="pager"><a href="#unit-6">← Unit 1.6</a><a href="#summary">My results →</a></div>
+</section>
+
+<!-- ============ SUMMARY ============ -->
+<section class="view" id="v-summary">
+  <div class="eyebrow">Results</div>
+  <h2>My results</h2>
+  <p class="lead">Your score counts your latest answer to each auto-marked item. Written answers are self-assessed and not counted.</p>
+  <div class="sumgrid" id="sumGrid"></div>
+  <div class="tbl"><table id="sumTable"><thead><tr><th>Section</th><th>Attempted</th><th>Correct</th><th>Score</th></tr></thead><tbody></tbody></table></div>
+  <div id="sumAdvice" class="note" hidden></div>
+  <div class="actions" style="margin-top:20px">
+    <button class="btn ghost" id="resetAsk">Reset all answers</button>
+    <span id="resetConfirm" hidden>This clears every answer and draft. <button class="btn" id="resetYes">Yes, reset</button> <button class="btn ghost" id="resetNo">Cancel</button></span>
+  </div>
+</section>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var KEY="econ-sim-u1-v1";
+var state={results:{},drafts:{},ticks:{}};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);state.results=p.results||{};state.drafts=p.drafts||{};state.ticks=p.ticks||{};}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function $(s,r){return (r||document).querySelector(s);}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
+function h(tag,attrs,html){var e=document.createElement(tag);if(attrs)for(var k in attrs){if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k]);}if(html!=null)e.innerHTML=html;return e;}
+
+var SECTIONS={u1:"Unit 1.1 check",u2:"Unit 1.2 check",u3:"Unit 1.3 check",u4:"Unit 1.4 check",u5:"Unit 1.5 check",u6:"Unit 1.6 check",pa:"A · Multiple choice",structure:"B · Data structures",stockflow:"C · Stock or flow",order:"D · Research order",num:"E · Numerical"};
+var TOTALS={};
+function register(sec,id){TOTALS[sec]=TOTALS[sec]||[];if(TOTALS[sec].indexOf(id)<0)TOTALS[sec].push(id);}
+function record(id,ok){state.results[id]=ok;save();updateScore();}
+
+/* ---------------- MCQ bank ---------------- */
+var MCQ={
+u1:[
+ {q:"Which statement best describes econometrics?",o:["Building mathematical models of the economy without reference to data","Using economic theory and data with statistical tools to answer \"how much\" questions","Collecting and publishing official economic statistics","Forecasting the economy from expert judgement"],a:1,e:"Econometrics combines theory, data and statistical methods to quantify relationships. Data collection and pure theory are inputs to it, not the discipline itself."},
+ {q:"Which of the following is NOT one of the typical goals of econometric analysis?",o:["Estimating relationships between economic variables","Testing economic theories and hypotheses","Evaluating government and business policy","Deriving theorems deductively, with no need for data"],a:3,e:"Deductive derivation is economic theory. Econometrics brings data to bear on estimation, testing, forecasting and policy evaluation."},
+ {q:"A retailer asks: \"By how much will our sales fall if a competitor cuts its price by RM1?\" This is mainly a question of:",o:["Estimation of an economic parameter (a cross-price effect)","Pure data description","Qualitative classification","Accounting"],a:0,e:"It asks for the size of an effect, such as a cross-price elasticity, which is a parameter to be estimated from data."}
+],
+u2:[
+ {q:"In <i>wage</i> = β<sub>0</sub> + β<sub>1</sub><i>educ</i> + β<sub>2</sub><i>exper</i> + β<sub>3</sub><i>training</i> + <i>u</i>, the parameter β<sub>3</sub> measures:",o:["The average wage of workers who received training","The change in hourly wage from one more week of training, holding education and experience fixed","The correlation between training and wages","The wage of a worker with zero education, experience and training"],a:1,e:"Each slope is a ceteris paribus effect: the change in the expected wage for a one-unit change in that regressor, other included regressors held fixed. Option D describes β<sub>0</sub>."},
+ {q:"Which of the following would be part of the error term <i>u</i> in the wage equation?",o:["Years of formal education","Weeks of job training","Innate ability","The intercept β<sub>0</sub>"],a:2,e:"<i>u</i> collects unobserved determinants of wages, such as innate ability, quality of education and family background."},
+ {q:"What most clearly distinguishes the econometric model of crime from Becker's economic model <i>y</i> = <i>f</i>(<i>x</i><sub>1</sub>,…,<i>x</i><sub>7</sub>)?",o:["It uses more variables","The functional form is specified, proxies replace unobservables, and an error term is added","It is derived from utility maximisation","It does not include age"],a:1,e:"Moving to an econometric model means committing to a functional form (here linear), using measurable proxies, and adding <i>u</i> for unobserved factors."},
+ {q:"In the econometric crime model, \"probability of being caught\" is replaced by \"frequency of prior arrests\" because:",o:["Arrest frequency is the theoretically correct variable","The probability is not directly observable, so a measurable proxy is used","It reduces the number of parameters","Becker's model required it"],a:1,e:"Theoretical variables are often unobservable, so econometric models approximate them with quantities we can measure."},
+ {q:"Predicting enrolment in two-year colleges over the next ten years is an example of which form of statistical inference?",o:["Estimation","Prediction","Hypothesis testing","Diagnostics"],a:1,e:"The lecture lists three uses of the econometric model: estimating parameters, predicting outcomes and testing hypotheses. Forecasting enrolment is prediction."}
+],
+u3:[
+ {q:"Tennessee's Project STAR, which randomly assigned pupils to small or regular classes, provides:",o:["Non-experimental survey data","Experimental data","Time series data only","Macro data"],a:1,e:"Random assignment of the treatment (class size) by the researcher makes it a planned experiment, which is rare in the social sciences."},
+ {q:"Data collected in a household survey, where all variables are recorded at the same time and cannot be repeated, are:",o:["Experimental","Non-experimental","Simulated","Controlled"],a:1,e:"Survey data are observed rather than generated by controlled variation, so they are non-experimental."},
+ {q:"Why does working with non-experimental data make it harder to learn about economic parameters?",o:["Non-experimental data sets are always smaller","The variable of interest may be correlated with other factors that also affect the outcome","Non-experimental data cannot be stored in software","Non-experimental data are always qualitative"],a:1,e:"Without random assignment, the variable of interest can move together with omitted factors in <i>u</i>, so simple comparisons confound its effect with theirs."}
+],
+u4:[
+ {q:"Which feature is most characteristic of time series data?",o:["Observations are independent random draws","The ordering of observations carries information and observations are typically serially correlated","Each unit is observed only once","There is no time dimension"],a:1,e:"Time series record the same quantity at regular intervals. Order matters and adjacent observations tend to be correlated. Trends and seasonality are common."},
+ {q:"The key difference between a pooled cross-section and a panel is that:",o:["A panel has more variables","A pooled cross-section follows the same units over time; a panel does not","A panel follows the same units over time; a pooled cross-section draws new independent samples each period","Only pooled cross-sections can be used for policy evaluation"],a:2,e:"In Table 1.4 the 1995 houses are a new random sample. In Table 1.5 the same cities appear in 1986 and 1990."},
+ {q:"A panel is described as <b>balanced</b> when:",o:["It has equal numbers of men and women","Every unit is observed for the same number of time periods","The number of units equals the number of periods","There are no missing variables"],a:1,e:"Balanced means the same number of time-period observations for each micro-unit."},
+ {q:"In Table 1.1 (wage data), the variable <i>married</i> takes values 0 or 1. It is an example of:",o:["A quantitative flow variable","A qualitative (either-or) variable coded as a dummy","A stock variable","A time series"],a:1,e:"Qualitative data describe an either-or situation, usually coded 1/0."},
+ {q:"Which is the main advantage of panel data highlighted in the lecture?",o:["They avoid all measurement error","They allow us to account for time-invariant unobserved characteristics and to model lagged responses","They never require statistical software","They are always larger than cross-sections"],a:1,e:"Because each unit is seen more than once, fixed unobserved traits (such as a city's culture) can be controlled for, and lagged effects (police → crime) can be modelled."}
+],
+u5:[
+ {q:"<i>Ceteris paribus</i> means:",o:["All else being random","Other relevant factors being equal","In the long run","On average across the population"],a:1,e:"A causal effect asks how <i>y</i> changes when <i>x</i> changes with other relevant factors held fixed."},
+ {q:"Why does the fertilizer experiment identify the causal effect on crop yield?",o:["Fertilizer is cheap","Random assignment makes the amount of fertilizer unrelated to other factors affecting yield","Soybeans respond linearly to fertilizer","Plots are all one acre"],a:1,e:"Randomisation breaks any link between the treatment and land quality, rainfall and parasites, so differences in yield reflect fertilizer."},
+ {q:"In a regression of wages on education using survey data, the main threat to a causal interpretation is that:",o:["Wages are measured in RM","Education is correlated with unobserved factors such as ability that also affect wages","Education is a discrete variable","The sample is too large"],a:1,e:"Without random assignment, people with more schooling may differ systematically (ability, family background). This is classic omitted-variable or ability bias."},
+ {q:"Beyond the fact that cities differ, the lecture stresses a further problem in estimating the effect of police on crime. What is it?",o:["Police numbers are measured with error","Police numbers and crime rates are determined at the same time (simultaneity)","Crime data are qualitative","Cities refuse to report police numbers"],a:1,e:"Cities with more crime tend to hire more police, so causation runs both ways. A positive raw correlation does not mean police cause crime."},
+ {q:"Why can't we treat observed minimum wage levels as if they were randomly assigned?",o:["Minimum wages never change","The level depends on political and economic factors that also influence unemployment","Unemployment is a stock variable","The data are cross-sectional"],a:1,e:"Governments set minimum wages in response to economic conditions, so the policy variable is correlated with other determinants of unemployment."}
+],
+u6:[
+ {q:"Which step comes immediately after obtaining sample data and choosing a method of analysis?",o:["Use economic theory to think about the problem","Estimate parameters, make predictions and test hypotheses","Perform model diagnostics","Write the acknowledgments"],a:1,e:"Order: theory → model → data and method → estimate/predict/test → diagnostics → evaluate implications."},
+ {q:"Which of these is NOT normally part of a research proposal abstract?",o:["A concise statement of the problem","A description of the research design and data sources","The potential contribution","Acknowledgments"],a:3,e:"Acknowledgments belong near the end of the full report, not in the proposal abstract."},
+ {q:"FRED is a database maintained by:",o:["The World Bank","The Federal Reserve Bank of St. Louis","The National Bureau of Economic Research","The University of Pennsylvania"],a:1,e:"FRED is Federal Reserve Economic Data from the St. Louis Fed. The Penn World Tables come from the University of Pennsylvania (now Groningen)."}
+],
+pa:[
+ {q:"An analyst has monthly data on Malaysia's CPI, overnight policy rate and ringgit exchange rate from 2005 to 2025. The data are:",o:["Cross-sectional, micro","Time series, macro","Panel, micro","Pooled cross-section, macro"],a:1,e:"One economy observed at regular intervals over time, with aggregate variables, gives a macro time series."},
+ {q:"Table 1.5 has 150 cities each observed in 1986 and 1990. How should we describe it?",o:["An unbalanced panel with 150 observations","A balanced two-year panel with 300 observations","A pooled cross-section with 300 independent observations","A time series of length 2"],a:1,e:"Same units, same two periods each: a balanced panel with 150 × 2 = 300 rows. The two rows for a city are not independent, unlike a pooled cross-section."},
+ {q:"A researcher estimates <i>crime</i> = β<sub>0</sub> + β<sub>1</sub><i>police</i> + <i>u</i> on cross-city data and finds β̂<sub>1</sub> > 0. The most defensible interpretation is:",o:["Hiring police causes crime to rise","The estimate probably reflects reverse causality or omitted city characteristics, not the ceteris paribus effect of police","The model is correct because the coefficient is significant","Police have no effect on crime"],a:1,e:"Cities with high crime hire more police (simultaneity), and unobserved city factors affect both. The estimate does not isolate the causal effect."},
+ {q:"Which research design comes closest to the ideal experiment for the effect of class size on test scores?",o:["Comparing test scores in schools that chose small classes with schools that did not","Randomly assigning pupils and teachers to small and regular classes within schools","Regressing national average test scores on national average class size over time","Surveying parents about class size preferences"],a:1,e:"Random assignment within schools, as in Project STAR, makes class size unrelated to pupil and school characteristics."},
+ {q:"Why does the lecture say econometric methods depend on the nature of the data?",o:["Because software requires it","Because the assumptions behind a method (independence, ordering, repeated units) differ across data structures, and using the wrong method can mislead","Because only cross-sectional data can be analysed","Because time series data cannot be used for hypothesis testing"],a:1,e:"Cross-sections are often treated as independent draws; time series are serially correlated; panels have repeated units. Methods must respect these features."},
+ {q:"Which pair correctly matches a variable to its type?",o:["Annual household consumption: stock","Number of employees on 31 December: flow","Value of exports in 2024: flow","Bank deposits at month-end: flow"],a:2,e:"Exports during a year are measured over a period, so they are a flow. Employees and deposits measured at a date are stocks. Consumption over a year is a flow."},
+ {q:"In which situation is pure random sampling of a cross-section most clearly violated?",o:["A random sample of 500 households drawn from a national register","A survey in which high-income households systematically refuse to respond","Drawing firms randomly from a complete list of registered firms","Randomly selecting individuals by computer-generated ID"],a:1,e:"Non-response correlated with the outcome (income) breaks random sampling. Clustered sampling is another common violation."},
+ {q:"The statement \"Most of econometrics deals with the specification of the error <i>u</i>\" refers mainly to:",o:["Choosing the font for regression output","Deciding what unobserved factors are in <i>u</i> and how they relate to the regressors","Minimising rounding errors in software","Choosing whether to include an intercept"],a:1,e:"Whether <i>u</i> is related to the regressors determines whether estimates can be given a ceteris paribus interpretation."}
+]};
+
+function renderMCQ(container,sec){
+  var list=MCQ[sec];
+  list.forEach(function(item,i){
+    var id=sec+"-"+i; register(sec,id);
+    var q=h("div",{class:"q"});
+    q.appendChild(h("div",{class:"stem"},'<span class="qn">Q'+(i+1)+'</span>'+item.q));
+    var opts=h("div",{class:"opts",role:"radiogroup"});
+    var chosen=null;
+    item.o.forEach(function(t,j){
+      var b=h("button",{class:"opt",type:"button",role:"radio","aria-checked":"false"},'<span class="l">'+"ABCD"[j]+'</span><span>'+t+'</span>');
+      b.addEventListener("click",function(){if(b.disabled)return;chosen=j;$$(".opt",opts).forEach(function(x){x.setAttribute("aria-checked","false");});b.setAttribute("aria-checked","true");chk.disabled=false;});
+      opts.appendChild(b);
+    });
+    q.appendChild(opts);
+    var act=h("div",{class:"actions"});
+    var chk=h("button",{class:"btn",type:"button"},"Check answer"); chk.disabled=true;
+    var retry=h("button",{class:"btn ghost",type:"button"},"Try again"); retry.hidden=true;
+    act.appendChild(chk);act.appendChild(retry);q.appendChild(act);
+    var fb=h("div",{class:"fb","aria-live":"polite"}); fb.hidden=true; q.appendChild(fb);
+    function show(sel){
+      var ok=sel===item.a;
+      $$(".opt",opts).forEach(function(x,j){x.disabled=true;if(j===item.a)x.classList.add("right");else if(j===sel)x.classList.add("wrong");});
+      fb.className="fb "+(ok?"ok":"bad");fb.innerHTML="<b>"+(ok?"Correct.":"Not quite. The answer is "+"ABCD"[item.a]+".")+"</b>"+item.e;fb.hidden=false;
+      chk.hidden=true;retry.hidden=false;
+    }
+    chk.addEventListener("click",function(){if(chosen==null)return;show(chosen);record(id,chosen===item.a);state.results[id+"_sel"]=chosen;save();});
+    retry.addEventListener("click",function(){chosen=null;$$(".opt",opts).forEach(function(x){x.disabled=false;x.classList.remove("right","wrong");x.setAttribute("aria-checked","false");});fb.hidden=true;chk.hidden=false;chk.disabled=true;retry.hidden=true;});
+    if(typeof state.results[id+"_sel"]==="number"){var s=state.results[id+"_sel"];opts.children[s].setAttribute("aria-checked","true");show(s);}
+    container.appendChild(q);
+  });
+}
+$$("[data-mcq]").forEach(function(el){renderMCQ(el,el.getAttribute("data-mcq"));});
+
+/* ---------------- Equation explorers ---------------- */
+var EQX={
+crime:[["crime","Dependent variable: some measure of criminal activity (in Becker's model, hours spent in crime)."],["=",null],["β₀","Intercept: expected crime when all regressors are zero. Rarely of direct interest."],["+",null],["β₁ wage<sub>m</sub>","Wage in legal employment. Theory predicts β₁ &lt; 0: better legal opportunities raise the opportunity cost of crime."],["+",null],["β₂ othinc","Other income (non-wage)."],["+",null],["β₃ freqarr","Frequency of prior arrests, a <b>proxy</b> for the unobservable probability of being caught. Expect β₃ &lt; 0 (deterrence)."],["+",null],["β₄ freqconv","Frequency of conviction, a proxy for the probability of conviction if caught."],["+",null],["β₅ avgsen","Average sentence length after conviction, a proxy for the expected sentence."],["+",null],["β₆ age","Age of the individual."],["+",null],["u","Error term: unobserved determinants such as the \"wage\" from crime, moral character and family background. Note that a variable in Becker's model (<i>x</i>₁) ends up in <i>u</i> because we cannot measure it."]],
+wage:[["wage","Hourly wage, the dependent variable."],["=",null],["β₀","Intercept: expected wage with zero education, experience and training."],["+",null],["β₁ educ","Years of formal education. β₁ is the ceteris paribus return to one more year of schooling."],["+",null],["β₂ exper","Years of workforce experience."],["+",null],["β₃ training","Weeks spent in job training. <b>β₃ is the parameter of interest</b>: how much does one more week of training raise wages, and is the effect different from zero?"],["+",null],["u","Unobserved determinants of the wage: innate ability, quality of education, family background, and so on. If ability is correlated with training or education, the estimates may not be causal."]]
+};
+$$("[data-eqx]").forEach(function(el){
+  var key=el.getAttribute("data-eqx"),out=$("#explain-"+key);
+  EQX[key].forEach(function(t){
+    if(t[1]==null){el.appendChild(h("span",{class:"op"},t[0]));return;}
+    var b=h("button",{type:"button"},t[0].replace(/^(β\S*) /,"$1 ").replace(/([a-z]+)(<sub>|$)/g,"<i>$1</i>$2"));
+    b.addEventListener("click",function(){$$("button",el).forEach(function(x){x.classList.remove("sel");});b.classList.add("sel");out.innerHTML=t[1];});
+    el.appendChild(b);
+  });
+});
+
+/* ---------------- Data structure explorer ---------------- */
+var DS=[
+ {k:"Cross-sectional",d:"A sample of individuals, households, firms, cities, states or countries taken at a given point or period in time. Observations are more or less independent; pure random sampling is the benchmark, though non-response and clustering can violate it. Typical in applied microeconomics.",cap:"Table 1.1 · Wages and characteristics of 526 workers",head:["obsno","wage","educ","exper","female","married"],rows:[[1,"3.10",11,2,1,0],[2,"3.24",12,22,1,1],[3,"3.00",11,2,0,0],[4,"6.00",8,44,0,1],"…",[525,"11.56",16,5,0,1],[526,"3.50",14,5,1,0]]},
+ {k:"Time series",d:"Observations on one or more variables over time: stock prices, money supply, CPI, GDP, car sales. Observations are typically serially correlated, ordering conveys information, frequency may be daily to annual, and trends and seasonality are common. Typical in macroeconomics and finance.",cap:"Table 1.3 · Minimum wage, coverage, unemployment and GNP, Puerto Rico 1950–1987",head:["obsno","year","avgmin","avgcov","prunemp","prgnp"],rows:[[1,1950,"0.20","20.1","15.4","878.7"],[2,1951,"0.21","20.7","16.0","925.0"],[3,1952,"0.23","22.6","14.8","1015.9"],"…",[37,1986,"3.35","58.1","18.9","4281.6"],[38,1987,"3.35","58.2","16.8","4496.7"]]},
+ {k:"Pooled cross-section",d:"Two or more cross-sections combined, each drawn independently. Different units appear in each period. Often used to evaluate policy changes by comparing before and after, such as house prices before (1993) and after (1995) a property tax reform.",cap:"Table 1.4 · House prices, 250 sales in 1993 and 270 in 1995",head:["obsno","year","hprice","proptax","sqrft","bdrms","bthrms"],rows:[[1,1993,"85,500",42,1600,3,2],[2,1993,"67,300",36,1440,3,2],"…",[250,1993,"243,600",41,2600,4,3],{hl:1,r:[251,1995,"65,000",16,1250,2,1]},[252,1995,"182,400",20,2200,4,2],"…",[520,1995,"57,200",16,1100,2,1]]},
+ {k:"Panel / longitudinal",d:"The same cross-sectional units are followed over time, so there is both a cross-sectional and a time-series dimension. Panels can account for time-invariant unobservables and model lagged responses. A panel is balanced when every unit has the same number of periods.",cap:"Table 1.5 · City crime, 150 cities × 2 years. Highlighted rows: one city observed twice",head:["obsno","city","year","murders","population","unem","police"],rows:[[1,1,1986,5,"350,000","8.7",440],[2,1,1990,8,"359,200","7.2",471],{hl:1,r:[3,2,1986,2,"64,300","5.4",75]},{hl:1,r:[4,2,1990,1,"65,100","5.5",75]},"…",[299,150,1986,25,"543,000","4.3",520],[300,150,1990,32,"546,200","5.2",493]]}
+];
+var segs=$("#dsSegs"),panel=$("#dsPanel");
+function showDS(i){
+  $$("button",segs).forEach(function(b,j){b.setAttribute("aria-pressed",j===i?"true":"false");});
+  var d=DS[i],t='<div class="tbl"><table><thead><tr>'+d.head.map(function(x){return"<th>"+x+"</th>";}).join("")+"</tr></thead><tbody>";
+  d.rows.forEach(function(r){
+    if(r==="…"){t+='<tr class="dots"><td colspan="'+d.head.length+'">· · ·</td></tr>';return;}
+    var cls=r.hl?' class="hl"':"",cells=r.r||r;t+="<tr"+cls+">"+cells.map(function(c){return"<td>"+c+"</td>";}).join("")+"</tr>";
+  });
+  t+="</tbody></table></div>";
+  panel.innerHTML='<div class="prose"><p>'+d.d+'</p></div><p class="caption">'+d.cap+"</p>"+t;
+}
+DS.forEach(function(d,i){var b=h("button",{type:"button","aria-pressed":"false"},d.k);b.addEventListener("click",function(){showDS(i);});segs.appendChild(b);});
+showDS(0);
+
+/* ---------------- Classifiers ---------------- */
+var CL={
+structure:{opts:["Cross-sectional","Time series","Pooled cross-section","Panel"],items:[
+ ["Hourly wage, education and experience for 526 workers, all surveyed in 1976.",0,"One random sample of individuals at one point in time."],
+ ["Quarterly real GDP of Malaysia, 2000Q1 to 2025Q4.",1,"One unit (the economy) recorded at regular intervals."],
+ ["A random sample of house sales in 1993 and a new, independent random sample in 1995.",2,"Independent cross-sections from two years, with different houses in each."],
+ ["Murders, population and police for the same 150 cities in 1986 and 1990.",3,"Same units followed over time."],
+ ["Daily closing value of the FBM KLCI index over five years.",1,"A single series ordered in time."],
+ ["Average growth of real GDP per capita, 1960–85, for 61 countries.",0,"Each country appears once; the averaging period does not make it a time series."],
+ ["Household Income Survey samples drawn independently in 2019 and 2022, combined into one file.",2,"Repeated independent samples, not the same households."],
+ ["Output and inputs of the same 44 rice farms recorded every year from 1990 to 1997.",3,"Same micro-units over several years: a (balanced) panel."]
+]},
+stockflow:{opts:["Stock","Flow"],items:[
+ ["Malaysia's national income in 2025.",1,"Measured over a year."],
+ ["Population on 1 January 2026.",0,"Measured at a point in time."],
+ ["A household's savings account balance on 31 December.",0,"A balance at a date."],
+ ["Monthly value of electronics exports.",1,"Measured over each month."],
+ ["A firm's capital stock at year-end.",0,"Accumulated amount at a date."],
+ ["Annual investment spending by firms.",1,"Spending during the year; it adds to the capital stock."],
+ ["Money supply (M2) at end of quarter.",0,"An amount outstanding at a date."],
+ ["Weekly hours worked by an employee.",1,"Measured over a week."]
+]}
+};
+function renderClassify(key){
+  var c=CL[key],box=$('[data-classify="'+key+'"]');box.innerHTML="";
+  c.items.forEach(function(it,i){
+    var id=key+"-"+i;register(key,id);
+    var row=h("div",{class:"crow"});
+    row.appendChild(h("p",null,'<span class="qn" style="font-family:var(--f-mono);color:var(--muted);font-size:13px;margin-right:6px">'+(i+1)+'</span>'+it[0]));
+    var sel=h("select",{id:"sel-"+id,"aria-label":"Answer for item "+(i+1)});
+    sel.appendChild(h("option",{value:""},"Choose…"));
+    c.opts.forEach(function(o,j){sel.appendChild(h("option",{value:String(j)},o));});
+    var saved=state.results[id+"_sel"];if(typeof saved==="number")sel.value=String(saved);
+    row.appendChild(sel);row.appendChild(h("span",{class:"mark","aria-hidden":"true"},""));
+    var why=h("div",{class:"why"},"");why.hidden=true;row.appendChild(why);
+    sel.addEventListener("change",function(){row.classList.remove("right","wrong");row.querySelector(".mark").textContent="";why.hidden=true;});
+    box.appendChild(row);
+  });
+}
+function checkClassify(key){
+  var c=CL[key],rows=$$('[data-classify="'+key+'"] .crow'),n=0,done=0;
+  rows.forEach(function(row,i){
+    var sel=row.querySelector("select"),it=c.items[i],id=key+"-"+i,why=row.querySelector(".why");
+    row.classList.remove("right","wrong");
+    if(sel.value===""){row.querySelector(".mark").textContent="";why.hidden=true;return;}
+    done++;var v=+sel.value,ok=v===it[1];if(ok)n++;
+    row.classList.add(ok?"right":"wrong");row.querySelector(".mark").textContent=ok?"✓":"✗";
+    why.innerHTML=(ok?"":"Answer: <b>"+c.opts[it[1]]+"</b>. ")+it[2];why.hidden=false;
+    state.results[id+"_sel"]=v;state.results[id]=ok;
+  });
+  save();updateScore();
+  $("#cl-"+key+"-msg").textContent=done?n+" of "+c.items.length+" correct"+(done<c.items.length?" ("+(c.items.length-done)+" unanswered)":""):"Choose an answer for at least one item.";
+}
+Object.keys(CL).forEach(function(k){renderClassify(k);});
+$$("[data-check-classify]").forEach(function(b){b.addEventListener("click",function(){checkClassify(b.getAttribute("data-check-classify"));});});
+$$("[data-reset-classify]").forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-reset-classify");CL[k].items.forEach(function(_,i){delete state.results[k+"-"+i];delete state.results[k+"-"+i+"_sel"];});save();renderClassify(k);updateScore();$("#cl-"+k+"-msg").textContent="";});});
+// restore checked state
+Object.keys(CL).forEach(function(k){if(CL[k].items.some(function(_,i){return typeof state.results[k+"-"+i+"_sel"]==="number";}))checkClassify(k);});
+
+/* ---------------- Ordering ---------------- */
+var STEPS=["Use economic theory to think about the problem","Develop a working economic model leading to an econometric model","Obtain sample data and choose a method of statistical analysis","Estimate parameters, make predictions and test hypotheses","Perform model diagnostics to check the validity of assumptions","Analyse and evaluate the economic consequences and implications"];
+register("order","order");
+var order=state.results.order_seq||[3,0,5,2,4,1];
+var list=$("#orderList");
+function renderOrder(marks){
+  list.innerHTML="";
+  order.forEach(function(s,i){
+    var li=h("li",marks?{class:marks[i]?"right":"wrong"}:null);
+    li.appendChild(h("span",{class:"pos"},String(i+1)));
+    li.appendChild(h("span",null,STEPS[s]));
+    var mv=h("div",{class:"mv"});
+    var up=h("button",{type:"button","aria-label":"Move up"},"↑"),dn=h("button",{type:"button","aria-label":"Move down"},"↓");
+    up.disabled=i===0;dn.disabled=i===order.length-1;
+    up.addEventListener("click",function(){swap(i,i-1);});dn.addEventListener("click",function(){swap(i,i+1);});
+    mv.appendChild(up);mv.appendChild(dn);li.appendChild(mv);list.appendChild(li);
+  });
+}
+function swap(a,b){var t=order[a];order[a]=order[b];order[b]=t;state.results.order_seq=order.slice();save();renderOrder();$("#orderFb").innerHTML="";}
+renderOrder();
+$("#orderCheck").addEventListener("click",function(){
+  var marks=order.map(function(s,i){return s===i;}),n=marks.filter(Boolean).length,ok=n===6;
+  renderOrder(marks);record("order",ok);
+  $("#orderFb").innerHTML='<div class="fb '+(ok?"ok":"bad")+'"><b>'+(ok?"Correct order.":n+" of 6 in the right position.")+"</b>"+(ok?"Theory comes first, and diagnostics come before you draw conclusions: results from a model whose assumptions fail cannot be trusted.":"Hint: theory and model come before data; diagnostics come after estimation but before interpreting the implications.")+"</div>";
+});
+$("#orderShuffle").addEventListener("click",function(){for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t;}state.results.order_seq=order.slice();save();renderOrder();$("#orderFb").innerHTML="";});
+
+/* ---------------- Numerical ---------------- */
+var NUM=[
+ {q:"Predicted hourly wage (RM) for a worker with 12 years of education, 10 years of experience and 4 weeks of training.",a:6.20,tol:0.01,sol:"ŵage = −2.10 + 0.60(12) + 0.05(10) + 0.15(4) = −2.10 + 7.20 + 0.50 + 0.60 = <b>RM6.20</b>."},
+ {q:"Two workers are identical except that one has 6 more weeks of training. By how much (RM per hour) do their predicted wages differ?",a:0.90,tol:0.01,sol:"Holding educ and exper fixed, Δŵage = β̂₃ × Δtraining = 0.15 × 6 = <b>RM0.90</b>. This is the ceteris paribus interpretation of β̂₃."},
+ {q:"How many additional years of education give the same predicted wage increase as 20 weeks of training?",a:5,tol:0.01,sol:"20 weeks × 0.15 = RM3.00. Divide by 0.60 per year of education: 3.00 / 0.60 = <b>5 years</b>."},
+ {q:"Table 1.5 is a balanced panel of 150 cities, each observed in 1986 and 1990. How many rows (observations) does it contain?",a:300,tol:0,sol:"Balanced panel rows = N × T = 150 × 2 = <b>300</b>."},
+ {q:"Table 1.4 pools 250 house sales from 1993 with a new sample of 270 sales from 1995. What is the total number of observations?",a:520,tol:0,sol:"250 + 270 = <b>520</b>. The samples are independent, so no house needs to appear twice."}
+];
+var numBox=$("[data-num]");
+NUM.forEach(function(it,i){
+  var id="num-"+i;register("num",id);
+  var q=h("div",{class:"q"});
+  q.appendChild(h("div",{class:"stem"},'<span class="qn">E'+(i+1)+"</span>"+it.q));
+  var row=h("div",{class:"num"});
+  var inp=h("input",{type:"number",step:"any",id:"in-"+id,"aria-label":"Answer E"+(i+1),placeholder:"Your answer"});
+  if(state.results[id+"_val"]!=null)inp.value=state.results[id+"_val"];
+  var btn=h("button",{class:"btn",type:"button"},"Check");
+  row.appendChild(inp);row.appendChild(btn);q.appendChild(row);
+  var fb=h("div",{class:"fb","aria-live":"polite"});fb.hidden=true;q.appendChild(fb);
+  function check(record_){
+    var v=parseFloat(inp.value);
+    if(isNaN(v)){fb.className="fb bad";fb.innerHTML="<b>Enter a number.</b>Use digits only, for example 6.2.";fb.hidden=false;return;}
+    var ok=Math.abs(v-it.a)<=it.tol+1e-9;
+    fb.className="fb "+(ok?"ok":"bad");fb.innerHTML="<b>"+(ok?"Correct.":"Not quite.")+"</b>"+it.sol;fb.hidden=false;
+    if(record_){state.results[id+"_val"]=inp.value;record(id,ok);}
+  }
+  btn.addEventListener("click",function(){check(true);});
+  inp.addEventListener("keydown",function(e){if(e.key==="Enter")check(true);});
+  if(state.results[id+"_val"]!=null)check(false);
+  numBox.appendChild(q);
+});
+
+/* ---------------- Written questions ---------------- */
+var SHORT=[
+ {q:"Using the job training example, distinguish an <b>economic model</b> from an <b>econometric model</b>. What does the error term <i>u</i> contain, and why do econometricians say that most of econometrics deals with its specification?",
+  model:"<p>An economic model states a relationship implied by theory, such as <i>wage</i> = <i>f</i>(<i>educ</i>, <i>exper</i>, <i>training</i>), without committing to a functional form or acknowledging unmeasured influences. The econometric model makes it estimable: <i>wage</i> = β₀ + β₁<i>educ</i> + β₂<i>exper</i> + β₃<i>training</i> + <i>u</i>. It specifies a functional form (linear), defines measurable variables, and introduces unknown parameters to be estimated.</p><p>The error <i>u</i> captures all other determinants of wages: innate ability, quality of education, family background, motivation, measurement error. Its specification matters because the β's have a ceteris paribus interpretation only if <i>u</i> is unrelated to the regressors. If more able workers both earn more and receive more training, then <i>u</i> and <i>training</i> are correlated and the estimate of β₃ mixes the effect of training with the effect of ability.</p>",
+  rubric:["States that the economic model gives a general function without functional form","Writes or describes the linear econometric model with parameters and error","Lists plausible contents of u (ability, school quality, family background)","Explains that a causal reading of β requires u to be unrelated to the regressors","Gives an example of how correlation between u and a regressor would bias the estimate"]},
+ {q:"Explain how <b>panel data</b> help to control for time-invariant unobserved factors, using the city crime data (Table 1.5) as your example. Why might the effect of police on crime be better captured with a lag?",
+  model:"<p>In Table 1.5 each of 150 cities appears in 1986 and 1990. Write <i>crime</i><sub>it</sub> = β₀ + β₁<i>police</i><sub>it</sub> + β₂<i>unem</i><sub>it</sub> + <i>a</i><sub>i</sub> + <i>u</i><sub>it</sub>, where <i>a</i><sub>i</sub> is a fixed, unobserved city characteristic (culture, geography, reporting practices). In a single cross-section <i>a</i><sub>i</sub> sits in the error and may be correlated with police numbers. With two observations per city we can difference across years: Δ<i>crime</i><sub>i</sub> = β₁Δ<i>police</i><sub>i</sub> + β₂Δ<i>unem</i><sub>i</sub> + Δ<i>u</i><sub>i</sub>. The fixed effect <i>a</i><sub>i</sub> drops out.</p><p>A lag is natural because hiring and training police takes time to affect crime, and current police numbers may respond to current crime (simultaneity). Using <i>police</i> in 1986 to explain crime in 1990 reduces the reverse-causality problem and captures the delayed response. Panel data make this possible because the same city is observed in both periods.</p>",
+  rubric:["Notes the same cities are observed in more than one period","Introduces a time-invariant unobserved effect and explains why it causes trouble in a cross-section","Explains that differencing or fixed effects removes it","Gives a reason for a lagged response (adjustment time and/or simultaneity)","Links both advantages explicitly to the panel structure"]},
+ {q:"Describe the <b>ideal experiment</b> for estimating the return to an additional year of education. Explain why it is infeasible and what problem this creates for a simple regression of wages on education using survey data.",
+  model:"<p>The ideal experiment would draw a group of people from the population and <b>randomly assign</b> different years of schooling, then compare their later wages. Random assignment ensures education is independent of ability, family background and motivation, so wage differences measure the causal return.</p><p>The experiment is infeasible for ethical, practical and legal reasons; we cannot force people to have more or less schooling. With observational survey data, people choose their education, and that choice is correlated with factors in <i>u</i>: more able or advantaged people tend to get more schooling and would also earn more anyway. A simple regression of wages on education therefore tends to <b>overstate</b> the return (positive omitted-variable or ability bias), and the coefficient cannot be read as a ceteris paribus effect without further assumptions or methods (more controls, panel data, natural experiments, instrumental variables).</p>",
+  rubric:["Describes random assignment of education","States why random assignment identifies the causal effect","Explains why the experiment is infeasible","Identifies correlation between education and unobservables such as ability","States the likely direction of bias or names a remedy"]},
+ {q:"A policy brief reports a strong <b>positive</b> correlation across cities between the number of police officers and the crime rate, and concludes that police \"do not work.\" Critically evaluate this conclusion.",
+  model:"<p>The conclusion confuses correlation with causation. First, <b>simultaneity</b>: cities facing high crime hire more police, so causation runs from crime to police as well as from police to crime. The lecture stresses that police numbers are determined at the same time as the crime rate. Second, <b>omitted variables</b>: large, dense or poorer cities may have both more crime and more police, so unobserved city characteristics drive both.</p><p>The relevant question is ceteris paribus: if two otherwise identical cities differed only in police numbers, how would crime differ? The ideal experiment, randomly assigning officers to cities, is infeasible. Better evidence would come from panel data (controlling for fixed city effects), lagged police numbers, or a source of variation in police that is unrelated to crime, such as an exogenous funding change. Until then, the positive correlation says little about whether police reduce crime.</p>",
+  rubric:["Distinguishes correlation from causation","Explains simultaneity or reverse causality","Mentions omitted city characteristics","Restates the question in ceteris paribus terms","Suggests a better design (panel, lag, exogenous variation)"]},
+ {q:"Propose a short empirical research project relevant to Malaysia. State the research question, a simple economic model, the econometric model, the data structure and a data source, and one threat to a causal interpretation.",
+  model:"<p><b>Example answer.</b> <i>Question:</i> What is the effect of the 2022 minimum wage increase on youth employment in Malaysia?</p><p><i>Economic model:</i> labour demand depends on the wage, product demand and labour productivity: <i>emp</i> = <i>f</i>(<i>minwage</i>, <i>GDP</i>, <i>productivity</i>).</p><p><i>Econometric model:</i> <i>log(emp</i><sub>st</sub>) = β₀ + β₁<i>bite</i><sub>st</sub> + β₂<i>log(GDP</i><sub>st</sub>) + <i>a</i><sub>s</sub> + <i>d</i><sub>t</sub> + <i>u</i><sub>st</sub>, where <i>bite</i> is the minimum wage relative to the state median wage, <i>a</i><sub>s</sub> are state effects and <i>d</i><sub>t</sub> year effects.</p><p><i>Data:</i> a state-by-year panel built from the Labour Force Survey and state GDP published by the Department of Statistics Malaysia (OpenDOSM).</p><p><i>Threat:</i> the timing and level of the minimum wage respond to economic conditions that also affect employment, so the policy variable may be correlated with <i>u</i>. Using variation in the bite across states with different wage levels, with state and year effects, partly addresses this.</p>",
+  rubric:["Clear, answerable \"how much\" research question","Economic model with justified variables","Econometric model with functional form, parameters and error term","Correctly identifies the data structure and a credible source","Names a specific threat to causal interpretation"]}
+];
+var shortBox=$("[data-short]");
+SHORT.forEach(function(it,i){
+  var id="sa-"+i,q=h("div",{class:"q short"});
+  q.appendChild(h("div",{class:"stem"},'<span class="qn">F'+(i+1)+"</span>"+it.q));
+  var ta=h("textarea",{id:"ta-"+id,"aria-label":"Your answer to F"+(i+1),placeholder:"Write your answer here. It is saved in this browser as you type."});
+  ta.value=state.drafts[id]||"";
+  var wc=h("span",{class:"caption"},"");
+  function count(){var n=(ta.value.trim().match(/\S+/g)||[]).length;wc.textContent=n+" words";}
+  ta.addEventListener("input",function(){state.drafts[id]=ta.value;save();count();});count();
+  q.appendChild(ta);
+  var act=h("div",{class:"actions"});var b=h("button",{class:"btn ghost",type:"button","aria-expanded":"false"},"Show model answer");act.appendChild(b);act.appendChild(wc);q.appendChild(act);
+  var m=h("div",{class:"model"});m.hidden=true;
+  m.innerHTML="<h4>Model answer</h4>"+it.model+'<div class="rubric"><h4 style="margin-top:14px">Self-marking checklist</h4></div>';
+  var rub=m.querySelector(".rubric");state.ticks[id]=state.ticks[id]||[];
+  var sc=h("p",{class:"caption",style:"margin-top:8px"},"");
+  function upd(){sc.textContent="You covered "+state.ticks[id].filter(Boolean).length+" of "+it.rubric.length+" key points.";}
+  it.rubric.forEach(function(r,j){
+    var lab=h("label",null,"");var cb=h("input",{type:"checkbox",id:"cb-"+id+"-"+j});cb.checked=!!state.ticks[id][j];
+    cb.addEventListener("change",function(){state.ticks[id][j]=cb.checked;save();upd();});
+    lab.appendChild(cb);lab.appendChild(h("span",null,r));rub.appendChild(lab);
+  });
+  rub.appendChild(sc);upd();
+  b.addEventListener("click",function(){m.hidden=!m.hidden;b.textContent=m.hidden?"Show model answer":"Hide model answer";b.setAttribute("aria-expanded",String(!m.hidden));});
+  q.appendChild(m);shortBox.appendChild(q);
+});
+
+/* ---------------- Score & summary ---------------- */
+var UNIT_SECS={"unit-1":"u1","unit-2":"u2","unit-3":"u3","unit-4":"u4","unit-5":"u5","unit-6":"u6"};
+function stats(sec){var ids=TOTALS[sec]||[],att=0,cor=0;ids.forEach(function(id){if(typeof state.results[id]==="boolean"){att++;if(state.results[id])cor++;}});return{n:ids.length,att:att,cor:cor};}
+function updateScore(){
+  var N=0,C=0,A=0;Object.keys(TOTALS).forEach(function(s){var st=stats(s);N+=st.n;C+=st.cor;A+=st.att;});
+  $("#scoreTxt").textContent=C+" / "+N;$("#meterFill").style.width=(N?100*C/N:0)+"%";
+  $$("#rail a").forEach(function(a){var v=a.getAttribute("data-v"),sec=UNIT_SECS[v];var old=a.querySelector(".done");if(old)old.remove();
+    if(sec){var st=stats(sec);if(st.att===st.n&&st.n)a.appendChild(h("span",{class:"done"},st.cor+"/"+st.n));}
+    if(v==="practice"){var t=0,c=0,n=0;["pa","structure","stockflow","order","num"].forEach(function(s){var st=stats(s);t+=st.att;c+=st.cor;n+=st.n;});if(t)a.appendChild(h("span",{class:"done"},c+"/"+n));}
+  });
+  renderSummary(N,C,A);
+}
+function renderSummary(N,C,A){
+  $("#sumGrid").innerHTML='<div><div class="v">'+C+" / "+N+'</div><div class="k">Correct</div></div><div><div class="v">'+A+'</div><div class="k">Attempted</div></div><div><div class="v">'+(A?Math.round(100*C/A):0)+'%</div><div class="k">Accuracy on attempted</div></div><div><div class="v">'+SHORT.filter(function(_,i){return (state.drafts["sa-"+i]||"").trim();}).length+" / "+SHORT.length+'</div><div class="k">Written answers drafted</div></div>';
+  var tb=$("#sumTable tbody");tb.innerHTML="";var weak=[];
+  Object.keys(SECTIONS).forEach(function(s){var st=stats(s);if(!st.n)return;
+    var pct=st.att?Math.round(100*st.cor/st.att)+"%":"–";
+    if(st.att&&st.cor/st.att<0.7)weak.push(SECTIONS[s]);
+    tb.appendChild(h("tr",null,"<td>"+SECTIONS[s]+"</td><td>"+st.att+" / "+st.n+"</td><td>"+st.cor+"</td><td>"+pct+"</td>"));});
+  var adv=$("#sumAdvice");
+  if(weak.length){adv.hidden=false;adv.innerHTML="<b>Revisit:</b> "+weak.join(", ")+". Re-read the matching unit, then use <i>Try again</i> on the questions you missed.";}
+  else if(A&&A===N){adv.hidden=false;adv.innerHTML="<b>Well done.</b> You have completed every auto-marked item at 70% or better. Make sure you have also attempted the written questions in Part F.";}
+  else adv.hidden=true;
+}
+$("#resetAsk").addEventListener("click",function(){$("#resetConfirm").hidden=false;});
+$("#resetNo").addEventListener("click",function(){$("#resetConfirm").hidden=true;});
+$("#resetYes").addEventListener("click",function(){try{localStorage.removeItem(KEY);}catch(e){}location.hash="overview";location.reload();});
+
+/* ---------------- Routing ---------------- */
+var VIEWS=["overview","unit-1","unit-2","unit-3","unit-4","unit-5","unit-6","practice","summary"];
+function route(){
+  var v=(location.hash||"").slice(1);if(VIEWS.indexOf(v)<0)v="overview";
+  $$("section.view").forEach(function(s){s.classList.toggle("on",s.id==="v-"+v);});
+  $$("#rail a").forEach(function(a){if(a.getAttribute("data-v")===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
+  var cur=$('#rail a[aria-current="page"]');if(cur&&cur.scrollIntoView&&window.innerWidth<=860)cur.scrollIntoView({block:"nearest",inline:"center"});
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+updateScore();route();
+})();
+</script>
+
+</body>
+</html>
